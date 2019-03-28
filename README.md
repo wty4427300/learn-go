@@ -1,6 +1,6 @@
-＃learn-go
+# learn-go
 
-go学习笔记
+# go学习笔记
 
 # 一.工作区和go path
 1.go version可以检验是否安装成功。
