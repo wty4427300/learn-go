@@ -75,7 +75,53 @@
 
 或者这样var name = flag.String("name", "everyone", "The greeting object.")
 
-3.
+运行：go run demo2.go -name="Robert"
+
+参数说明：$ go run demo2.go --help
+
+go run 命令会临时生成可执行文件
+
+3.自定义参数使用说明
+
+对flag.usage重新赋值
+
+在main函数开始处
+
+flag.Usage = func() {
+
+ fmt.Fprintf(os.Stderr, "Usage of %s:\n", "question")
+ 
+ flag.PrintDefaults()
+ 
+}
+
+或者对flag.CommandLine重新赋值
+
+在init()函数开始处
+
+flag.CommandLine = flag.NewFlagSet("", flag.ExitOnError)
+
+flag.CommandLine.Usage = func() {
+
+	fmt.Fprintf(os.Stderr, "Usage of %s:\n", "question")
+  
+	flag.PrintDefaults()
+  
+}
+
+或者创建一个自己的私有容器
+
+var cmdLine = flag.NewFlagSet("question", flag.ExitOnError)
+
+把对flag.stringvar的调用替换成cmdline.parse(os.Args[:1])
+
+os.Args[1:]就是我们给定的那些命令参数
+
+
+
+
+
+
 
 
 
