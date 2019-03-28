@@ -1,5 +1,3 @@
-# learn-go
-
 # go学习笔记
 
 # 一.工作区和go path
