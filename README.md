@@ -135,7 +135,7 @@ os.Args[1:]就是我们给定的那些命令参数
 
 6.包名冲突的两种解决方式：1.起别名-import 别名 "包名/相对目录"2.本地化方式导入代码包import."相对目录"。
 
-# 四.实体程序那些事（上）
+# 四.程序实体那些事（上）
 
 1.go语言中的实体程序包括变量，常量，函数，结构体，接口。
 
@@ -152,6 +152,128 @@ os.Args[1:]就是我们给定的那些命令参数
 2.程序在查找可重名变量时，会由内向外逐层代码块查找，直到找到当前代码包那一层还没找到就会报错，并不会去导入的代码包里找。如果导入的包是用本地化的方式（import.xxx）那么程序是会去导入的包里面找变量的。
 
 3.可重名变量类型可以不一致。
+
+# 六.程序实体那些事（下）
+
+1.如何判断一个变量的类型。答：使用类型断言表达式。
+
+value, ok := interface{}(container).([]string)//先转化为一个空接口然后再判断他是不是一个切片类型。
+
+断言表达式的语法类型是想x.(T).x代表要被判断的类型的值，这个值当下的类型必须是接口类型，不过具体是那个接口类型其实是无所谓的。
+
+多类型判断可以配合switch使用
+
+2.别名类型。例如： type MyString =string。 给string换个名。
+
+byte实际就是uint8。rune是int32
+
+3.类型再定义。例如： type MyString2 string
+
+只有潜在类型相同的不同类型可以互相转化。但他们的值之间不能比较。
+
+# 七.数组和切片
+
+1.数组是定长的切片是变长的。
+
+2.package main
+
+import "fmt"
+
+func main() {
+
+	// 示例 1。
+	
+	s1 := make([]int, 5)
+	
+	fmt.Printf("The length of s1: %d\n", len(s1))
+	
+	fmt.Printf("The capacity of s1: %d\n", cap(s1))
+	
+	fmt.Printf("The value of s1: %d\n", s1)
+	
+	s2 := make([]int, 5, 8)
+	
+	fmt.Printf("The length of s2: %d\n", len(s2))
+	
+	fmt.Printf("The capacity of s2: %d\n", cap(s2))
+	
+	fmt.Printf("The value of s2: %d\n", s2)
+	
+}
+
+3.s3 := []int{1, 2, 3, 4, 5, 6, 7, 8}
+
+s4 := s3[3:6]//容量3（4，5，6）
+
+fmt.Printf("The length of s4: %d\n", len(s4))
+
+fmt.Printf("The capacity of s4: %d\n", cap(s4))
+
+fmt.Printf("The value of s4: %d\n", s4)
+
+4.切片窗口向右扩展到最大s4[0:cap(s4)]
+
+5.估算切片容量增长：1.一般情况下新切片的容量是原切片的两倍。2.当原切片的长度大于1024，则会以1.25倍扩容。直到结果长度不小于要追加元素之和。
+
+6.确切的说切片的底层数组并不会被替换，因为扩容生成新的底层数组时也生成了新切片。
+
+7.无需扩容时append返回的原底层数组的新切片，需要扩容时返回的是新底层数组的新切片。
+
+# 八.container包中的那些容器
+
+1.list以及其元素结构Element
+
+首先是list的四种方法：MoveBefore和MoAfter,他们分别作用于把给定的元素移动到另一个元素的前面和后面。
+
+MoveToFront和MoveToBack,分别作用于把给定元素移动到链表最前面和最后面。
+
+func (l *List) MoveBefore(e, mark *Element)
+
+func (l *List) MoveAfter(e, mark *Element)
+
+
+func (l *List) MoveToFront(e *Element)
+
+func (l *List) MoveToBack(e *Element)
+
+然后是Front和Back，分别用于获取链表最前和最后的元素。
+
+insertBefore和insertAfter，分别用于在指定的元素之前和之后插入新元素
+
+PushFront和PushBack，分别用于在链表的最前和最后插入元素
+
+func (l *List) Front() *Element
+
+func (l *List) Back() *Element
+
+
+func (l *List) InsertBefore(v interface{}, mark *Element) *Element
+
+func (l *List) InsertAfter(v interface{}, mark *Element) *Element
+
+
+func (l *List) PushFront(v interface{}) *Element
+
+func (l *List) PushBack(v interface{}) *Element
+
+2.关于ring
+
+  1.ring仅由他自身就可以代表，而list需要自身和Element。
+ 
+  2.ring只代表所属循环链表中的一个元素，而list代表整个链表
+  
+  3.通过var r ring.Ring得到的是一个长度为1的循环链表，而list类型的零值则代表一个长度为0的链表。list的根元素不会持有实际元素
+  
+  4.创建一个ring值时可以指定他包含的元素数量。循环链表一旦被创建长度是不可变的。
+  
+  5.ring的len方法时间复杂度o(n),list为o(1)。
+  
+  # 九.字典的操作和约束
+
+
+
+
+
 
 
 
