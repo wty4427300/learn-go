@@ -269,6 +269,37 @@ func (l *List) PushBack(v interface{}) *Element
   5.ring的len方法时间复杂度o(n),list为o(1)。
   
   # 九.字典的操作和约束
+  
+  1.aMap := map[string]int{
+  
+	"one":    1,
+	
+	"two":    2,
+	
+	"three": 3,
+	
+}
+k := "two"
+
+v, ok := aMap[k]
+
+if ok {
+
+	fmt.Printf("The element of key %q: %d\n", k, v)
+	
+} else {
+
+	fmt.Println("Not found!")
+	
+}
+
+2.首先哈希表会把键值转化为哈希值，然后利用这个哈希值的低几位去定位到一个哈希桶，然后再去这个哈希桶中，查找这个键，由于键-元素是绑定的
+找到这个键就一定能找到其对应的元素值，随后，哈希表就会把相对应的元素值作为结果返回。
+
+3.字典的键值类型不可以是：函数，字典，切片。
+
+4.
+
 
 
 
