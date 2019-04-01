@@ -472,7 +472,59 @@ func genCalculator(op operate) calculateFunc {
 
 # 十三.结构体及其方法的使用法门
 
-1.
+1.// AnimalCategory 代表动物分类学中的基本分类法。
+
+type AnimalCategory struct {
+
+	kingdom string // 界。
+	
+	phylum string // 门。
+	
+	class  string // 纲。
+	
+	order  string // 目。
+	
+	family string // 科。
+	
+	genus  string // 属。
+	
+	species string // 种。
+	
+}
+
+func (ac AnimalCategory) String() string {
+
+	return fmt.Sprintf("%s%s%s%s%s%s%s",
+	
+		ac.kingdom, ac.phylum, ac.class, ac.order,
+		
+		ac.family, ac.genus, ac.species)
+		
+}
+
+2.内嵌字段及使用
+
+type Animal struct {
+
+	scientificName string // 学名。
+	
+	AnimalCategory    // 动物基本分类。
+	
+}
+
+func (a Animal) Category() string {
+
+	return a.AnimalCategory.String()
+	
+}
+
+3.如果外围字段和内嵌字段具有一种同名方法，则内嵌字段的方法会被屏蔽。
+
+4.一个结构体嵌入了两个结构体，这两个结构体有同名方法则会引发编译错误。
+
+5.值方法与指针方法的区别
+
+
 
   
 
