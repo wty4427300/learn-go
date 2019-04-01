@@ -268,7 +268,7 @@ func (l *List) PushBack(v interface{}) *Element
   
   5.ring的len方法时间复杂度o(n),list为o(1)。
   
-  # 九.字典的操作和约束
+# 九.字典的操作和约束
   
   1.aMap := map[string]int{
   
@@ -418,8 +418,62 @@ default:
    3.如果同时发现多个条件满足，那么就会用一种伪随机算法在这些分支中选择一个执行。
    
    4.一个select只能有一个default。
-   
-   5.
+  
+5。如果在select语句中发现某个通道已关闭，那么应该改怎么样屏蔽掉他所在的分支？
+
+答：直接将nil赋给那个通道变量。
+
+# 十二.使用函数的正确姿势
+
+1.只要两个函数的参数列表和结果列表里面的元素顺序及其类型是一样的，我们就可以说这两函数是一样的函数，也就是说他们实现了同一种函数类型。
+
+2.高阶函数(函数作为参数传入，函数作为结果返回)
+
+type operate func(x, y int) int
+
+op := func(x, y int) int {
+
+	return x + y
+	
+}
+
+func calculate(x int, y int, op operate) (int, error) {
+
+	if op == nil {
+	
+		return 0, errors.New("invalid operation")
+		
+	}
+	
+	return op(x, y), nil
+	
+}
+
+3.闭包
+func genCalculator(op operate) calculateFunc {
+
+	return func(x int, y int) (int, error) {
+	
+		if op == nil {
+		
+			return 0, errors.New("invalid operation")
+			
+		}
+		
+		return op(x, y), nil
+		
+	}
+	
+}
+
+4.传入函数的如果是值类型，那么修改它不会影响原值，如果是引用类型（切片，字典，通道）则会影响原值
+
+5.函数返回指针不会发生拷贝，返回非指针并把结果赋给其他变量则必定拷贝（谨记go都是浅拷贝，起的区分值类型和引用类型）
+
+# 十三.结构体及其方法的使用法门
+
+1.
+
   
 
 
