@@ -600,8 +600,195 @@ nameP := (*string)(unsafe.Pointer(namePtr))
 
 # 十六.go语句以及其执行规则（上）
 
+1.G(goroutine),p(processor)可承载若干个G且能使这G适时的与M对接,M(machine)系统级线程。
+
+2.main函数就是一个go程序的主goroutine当他结束的时候就相当于go程序结束，其他未被执行的goroutine就再也没有机会执行了。
+package main
+
+import "fmt"
+
+func main() {
+
+	for i := 0; i < 10; i++ {
+	
+		go func() {
+		
+			fmt.Println(i)
+			
+		}()
+		
+	}
+	
+}
+
+# 十七.go语句以及其执行规则（下）
+
+1.如何使主goroutine等待其他goroutine
+  
+  1.使用time.Sleep()
+  
+  2.使用atomic原子操作实现简单的自旋来保证顺序。
+  
+# 十八.if语句丶for语句和switch语句
+
+1.numbers1 := []int{1, 2, 3, 4, 5, 6}
+
+for i := range numbers1 {
+
+	if i == 3 {
+	
+		numbers1[i] |= i
+		
+	}
+	
+}
+
+fmt.Println(numbers1)
+
+range语句迭代一个变量是索引值，迭代两个变量是索引值和元素值
+
+2.  numbers2 := [...]int{1, 2, 3, 4, 5, 6}
+
+maxIndex2 := len(numbers2) - 1
+
+for i, e := range numbers2 {
+
+	if i == maxIndex2 {
+	
+		numbers2[0] += e
+		
+	} else {
+	
+		numbers2[i+1] += e
+		
+	}
+	
+}
+
+fmt.Println(numbers2)
+
+这里要注意数组与切片的区别。
+
+3.若switch表达式和case子表达式值类型不一样，会发生以switch表达式为基准的自动转换。
+
+5.value5 := [...]int8{0, 1, 2, 3, 4, 5, 6}
+
+switch value5[4] {
+
+case value5[0], value5[1], value5[2]:
+
+	fmt.Println("0 or 1 or 2")
+	
+case value5[2], value5[3], value5[4]:
+
+	fmt.Println("2 or 3 or 4")
+	
+case value5[4], value5[5], value5[6]:
+
+	fmt.Println("4 or 5 or 6")
+	
+}
+
+利用索引表达式这种间接的方式绕过switch对case唯一性的束缚。
+
+4.value6 := interface{}(byte(127))
+
+switch t := value6.(type) {
+
+case uint8, uint16:
+
+	fmt.Println("uint8 or uint16")
+	
+case byte:
+
+	fmt.Printf("byte")
+	
+default:
+
+	fmt.Printf("unsupported type: %T", t)
+	
+}
+
+但是这种判断类型的switch语句无法被绕过，这里byte和uint8类型重复了，编译无法通过。
+
+# 十九.错误处理（上）
+
+1.package main
+
+import (
+
+	"errors"
+	
+	"fmt"
+	
+)
+
+func echo(request string)(reponse string,err error){
+
+	if request==""{
+	
+		err=errors.New("empty request")
+		
+		return
+		
+	}
+	
+	reponse=fmt.Sprintf("echo111:",request)
+	
+	return
+	
+}
+
+func main()  {
+
+	for  _,req:=range []string{"","shabi!"}{
+	
+		fmt.Printf("request",req)
+		
+		resp,err:=echo(req)
+		
+		if err!=nil{
+		
+			fmt.Println(err)
+			
+			continue
+	
+		}
+		
+		fmt.Println(resp)
+		
+	}
+	
+}
+
+2.对于具体的错误判断，go语言中都有那些惯用法？
+
+    1.对于类型在已知范围内的一系列错误值，一般使用类型断言表达式或类型switch语句判断。
+
+    2.对于已有相应变量且类型相同的错误值，一般直接用判等操作来判断
+    
+    3.对于没有相应变量且类型未知的一系列错误值，只能使用错误信息的字符串表达形式来做判断。
+
+# 二十.错误处理（下）
+
+1.用类型建立起树形结构的错误体系，用统一字段建立起可追根溯源的链式错误关联。
+
+2.由若干个名称不同但类型相同的错误值组成集合。如果他们是公开的，那就应该使成为常量而不是变量，或编写私有的错误值以及公开的获取和判等函数，避免恶意篡改。
+
+# 二十一.panic函数，recover函数以及defer语句（上）
 
 
+
+
+
+
+
+
+  
+  
+
+
+ 
 
 
 
