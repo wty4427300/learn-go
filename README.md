@@ -777,8 +777,63 @@ func main()  {
 
 # 二十一.panic函数，recover函数以及defer语句（上）
 
+1.从panic被引发到程序终止运行的大致过程是什么？
+ 
+  答：假如说某个函数的某行代码无意中引发了panic,这时初始化panic就会被建立起来，并且改程序的控制权就会从这行代码转移至调用其所属的函数的那行代码上，也就是调用栈中的上一级，但是控制权并不会在这里停留，而是会继续一级一级往上转移，直到最外层函数哪里，一般情况下就是主goroutine也就是main函数哪里，然后控制权被go语言运行时系统回收。随后程序崩溃并停止运行。在这个控制权不断转移的过程中，panic会不断地积累和完善，并在程序终止之前被打印出来。
+  
+# 二十二.panic函数，recover函数以及defer语句（下）
+  
+1.怎么样让panic包含一个值，以及应该让它包含什么样的值？
+   
+  答：直接调用panic函数就可以了，它的参数是一个空接口类型的，所以从语法上讲可以接受任何类型的值。最好是让他接收error类型的错误值。
+  
+2.怎样施加应对panic的保护措施，从而避免程序崩溃？
+  
+  答：使用内建函数recover。
+  
+package main
 
+import (
 
+ "fmt"
+ 
+ "errors"
+ 
+)
+
+func main() {
+
+ fmt.Println("Enter function main.")
+ 
+ defer func(){
+ 
+  fmt.Println("Enter defer function.")
+  
+  if p := recover(); p != nil {
+  
+   fmt.Printf("panic: %s\n", p)
+   
+  }
+  
+  fmt.Println("Exit defer function.")
+  
+ }()
+ 
+ // 引发 panic。
+ 
+ panic(errors.New("something wrong"))
+ 
+ fmt.Println("Exit function main.")
+ 
+}
+
+3.多个defer函数调用的执行顺序
+
+  1.从下到上一次调用
+  
+  2.存储defer函数以及参数的队列他是先进后出（FILO)的，相当于一个栈。
+
+由上所述demo51的结果应该是：last ,2,1,0, frist
 
 
 
