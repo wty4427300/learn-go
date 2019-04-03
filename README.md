@@ -870,9 +870,9 @@ func main() {
   
   pkg: puzzlers/article20/q3
   
-  BenchmarkGetPrimes-8      500000       2314 ns/op
+  BenchmarkGetPrimes-8                     500000                    2314 ns/op
   
-  被测试函数          CPU数                 平均时间
+  被测试函数          最大P数（逻辑CPU最大数）  （最大测试次数）               平均时间
   
   PASS
   
@@ -883,6 +883,10 @@ func main() {
 标记-bench才会进行性能测试 标记-run表明需要执行那些功能测试函数^$以为执行名称为空的功能测试函数，换句话说，不执行任何功能测试函数。
 
 # 二十五.更多的测试手法
+
+1.-cpu 1,2,4 相当于测试性能不同的计算机
+  
+  -count重复执行测试函数，它大于等于0，默认为1
  
 
   
