@@ -884,12 +884,24 @@ func main() {
 
 # 二十五.更多的测试手法
 
-1.-cpu 1,2,4 相当于测试性能不同的计算机
+1.-cpu 1,2,4 相当于测试性能(CPU数)不同的计算机
   
   -count重复执行测试函数，它大于等于0，默认为1
- 
-
   
+  -parallel设置一个被侧代码包中的给你测试函数最大并发数、默认值是测试运行时的最大P数量。
+  
+  -cover标记。开启测试覆盖度分析。
+  
+2.性能测试的并发牵扯到b.RunParallel方法、b.SetParallelism方法和-cpu标记的联合运用。
+
+3.性能测试函数中的计时器：StarTimer,StopTimer,ResetTimer。
+
+# 二十六sync.Mutex与sync.RWMutex
+
+
+
+
+
   
 
 
