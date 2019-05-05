@@ -1020,7 +1020,7 @@ func main() {
 
 3.判断unicode字符是否为单字节字符，可以使用unicode/utf8代码包中的runelen,encoderune函数等。
 
-# 三十七.string包与字符串操作
+# 三十七.strings包与字符串操作
 
 1.string.bulider的优势
   
