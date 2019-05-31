@@ -1,1 +1,20 @@
+1.
+package main
 
+import "fmt"
+
+func main() {
+
+	var ch chan int
+  
+	go func() {
+  
+		ch <- 1
+    
+	}()
+  
+    fmt.Println(<-ch)
+    
+}
+
+通道没有初始化也可通关编译但是读写会阻塞，关闭会panic。
